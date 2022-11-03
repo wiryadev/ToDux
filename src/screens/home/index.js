@@ -1,13 +1,15 @@
 import React from "react";
 import { FlatList, Text, View } from "react-native";
-import { Appbar, Avatar, Card, TouchableRipple, useTheme } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { Appbar, Avatar, Card, IconButton, TouchableRipple, useTheme } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteToDo } from "../../redux/actions/ToDuxAction";
 
 const HomeScreen = ({ navigation }) => {
 
   const theme = useTheme()
 
   const todos = useSelector((state) => state.todux.todos)
+  const dispatch = useDispatch()
 
   return (
     <View style={{ flex: 1 }}>
@@ -50,7 +52,17 @@ const HomeScreen = ({ navigation }) => {
                 }}
                 subtitle={item.desc ?? ''}
                 subtitleVariant="bodyMedium"
-                left={(props) => <Avatar.Icon {...props} icon="note" />}
+                left={(props) =>
+                  <Avatar.Icon {...props} 
+                  icon="note" 
+                  />
+                }
+                right={(props) =>
+                  <IconButton {...props} 
+                  icon="delete" 
+                  onPress={() => { dispatch(deleteToDo(item.id)) }} 
+                  />
+                }
               />
             </Card>
           </TouchableRipple>
