@@ -9,9 +9,9 @@ export const addToDo = (todo) => ({
   payload: todo,
 })
 
-export const editToDo = (id, todo) => ({
+export const editToDo = (todo) => ({
   type: EDIT_TODO_ACTION,
-  payload: {id, todo},
+  payload: todo,
 })
 
 export const deleteToDo = (id) => ({

@@ -3,16 +3,18 @@ import { Alert, View } from "react-native"
 import { Appbar, Button, TextInput, useTheme } from "react-native-paper"
 import { useDispatch } from "react-redux"
 import Spacer from "../../components/Spacer"
-import { addToDo } from "../../redux/actions/ToDuxAction"
+import { addToDo, deleteToDo, editToDo } from "../../redux/actions/ToDuxAction"
 
-const FormScreen = ({ navigation }) => {
+const FormScreen = ({ route, navigation }) => {
 
   const theme = useTheme()
-
   const dispatch = useDispatch()
 
-  const [title, setTitle] = useState('')
-  const [desc, setDesc] = useState('')
+  const selectedTodo = route.params?.todo
+  const isEditMode = route.params?.todo || false
+
+  const [title, setTitle] = useState(selectedTodo?.title || '')
+  const [desc, setDesc] = useState(selectedTodo?.desc || '')
 
   const onSubmit = useCallback(
     () => {
@@ -21,12 +23,22 @@ const FormScreen = ({ navigation }) => {
         return
       }
 
-      const uid = new Date().getTime()
-      dispatch(addToDo({ id: uid, title, desc }))
+      if (isEditMode) {
+        dispatch(editToDo({ id: selectedTodo.id, title, desc }))
+      } else {
+        const uid = new Date().getTime()
+        dispatch(addToDo({ id: uid, title, desc }))
+      }
       navigation.goBack()
     },
     [title, desc],
   )
+
+  const onDelete = useCallback(
+    () => {
+      dispatch(deleteToDo(selectedTodo.id))
+      navigation.goBack()
+    }, [])
 
   return (
     <View style={{ flex: 1 }}>
@@ -60,6 +72,16 @@ const FormScreen = ({ navigation }) => {
         >
           Submit
         </Button>
+        <Spacer height={16} />
+        {isEditMode && (
+          <Button
+            mode="contained"
+            onPress={onDelete}
+            buttonColor={theme.colors.error}
+          >
+            Delete
+          </Button>
+        )}
       </View>
     </View>
   )

@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         todos: state.todos.map((item) =>
-          (item.id === action.payload.id ? action.payload.todo : item)
+          (item.id === action.payload.id ? action.payload : item)
         )
       }
     case DELETE_TODO_ACTION:

@@ -1,6 +1,6 @@
 import React from "react";
-import { FlatList, Text, View } from "react-native";
-import { Appbar, Avatar, Card, IconButton, TouchableRipple, useTheme } from "react-native-paper";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { Appbar, Avatar, Card, FAB, IconButton, TouchableRipple, useTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteToDo } from "../../redux/actions/ToDuxAction";
 
@@ -13,13 +13,11 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Appbar.Header style={{ backgroundColor: theme.colors.primaryContainer }}>
+      <Appbar.Header
+        style={{ backgroundColor: theme.colors.primaryContainer }}
+      >
         <Appbar.Content
           title="Home"
-        />
-        <Appbar.Action
-          icon="plus"
-          onPress={() => navigation.navigate('FormScreen')}
         />
       </Appbar.Header>
       <FlatList
@@ -34,8 +32,7 @@ const HomeScreen = ({ navigation }) => {
           <TouchableRipple
             style={{ padding: 12 }}
             onPress={() => navigation.navigate("FormScreen", {
-              id: item.id,
-              type: "edit"
+              todo: item
             })}
           >
             <Card
@@ -53,14 +50,14 @@ const HomeScreen = ({ navigation }) => {
                 subtitle={item.desc ?? ''}
                 subtitleVariant="bodyMedium"
                 left={(props) =>
-                  <Avatar.Icon {...props} 
-                  icon="note" 
+                  <Avatar.Icon {...props}
+                    icon="note"
                   />
                 }
                 right={(props) =>
-                  <IconButton {...props} 
-                  icon="delete" 
-                  onPress={() => { dispatch(deleteToDo(item.id)) }} 
+                  <IconButton {...props}
+                    icon="delete"
+                    onPress={() => { dispatch(deleteToDo(item.id)) }}
                   />
                 }
               />
@@ -68,8 +65,22 @@ const HomeScreen = ({ navigation }) => {
           </TouchableRipple>
         )}
       />
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={() => navigation.navigate("FormScreen")}
+      />
     </View>
   );
 };
 
 export default HomeScreen;
+
+const styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+})
